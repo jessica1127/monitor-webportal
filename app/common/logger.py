@@ -4,10 +4,10 @@ import logging, os
 
 
 class Logger:
-	def __init__(self, path, Clevel = logging.DEBUG, Flevel = logging.DEBUG):
+	def __init__(self, path='../../app.cfg', Clevel = logging.DEBUG, Flevel = logging.DEBUG):
 		self.logger = logging.getLogger(path)
 		self.logger.setLevel(Flevel)
-		fmt = logging.Formatter("%(asctime)s %(filename)s [line:%(lineno)d] %(levelname)s %(message)s")
+		fmt = logging.Formatter("%(asctime)s %(name)s [line:%(lineno)d] %(levelname)s %(message)s")
 		#set CMD logger:
 		sh = logging.StreamHandler()
 		sh.setFormatter(fmt)
@@ -36,6 +36,9 @@ class Logger:
 
 	def cri(self, message):
 		self.logger.critical(message)
+
+	def exception(self, message):
+		self.logger.exception(message)
 
 
 
