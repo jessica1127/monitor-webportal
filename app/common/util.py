@@ -40,5 +40,36 @@ def db_setup_everything(c, con):
     con.commit()
 
 
+def db_insert(c, con, key, url, content):
+    try:
+        c.execute('INSERT INTO cache VALUES(key, url, content)')
+        data1 = c.fetclone()
+        data2 = c.fetchall()
+    except lite.OperationalError:
+        c.execute("CREATE TABLE cache(item text, url text, content text)")
+    con.commit()
 
-     
+def search_one_item(c, con, key, url):
+    try:
+        c.execute("SELECT * FROM cache WHERE item = key AND url = url")
+        data1 = c.fetclone()
+        logger.debug(' Internal search_one_item, data1 = {0}'.format(data1))
+    except:
+        logger.debug('Select Error!')
+    con.commit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

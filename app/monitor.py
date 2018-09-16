@@ -35,11 +35,19 @@ class Monitor():
 					os.makedirs(self.directory)
 
 				try:
-					req = urllib2.Request(url)
-					html_page = urllib2.urlopen(req)
-					print "html_page = ", html_page
+					hdr = {'User-Agent':'Mozilla/5.0'}
+					req = urllib2.Request(url, headers = hdr)
+					response = urllib2.urlopen(req)
+					html_page = response.read()
+
+					#req = urllib2.Request(url)
+					self.logger.debug('111111111111 = {0}')
+					#html_page = urllib2.urlopen(req)
+					self.logger.debug('html_page = {0}'.format(html_page))
+					self.logger.debug('key={0}, url = {1}, html_page = {2}'.format(key, url, html_page))
+					
 				except urllib2.URLError as reason:
-					self.logger.error("URLError : {0}".format(url)) 
+					self.logger.error("URLError : {0}".format(reason)) 
 					continue
 				except ValueError:
 					self.logger.error("Invalida URL: {0}".format(url))
@@ -47,10 +55,12 @@ class Monitor():
 				except keyboardInterrupt:
 					self.logger.error("Invalida URL: {0}".format(url));
 
-				source = html_page.read()
-				soup = BeautifulSoup(features="lxml")
-				content = soup.prettify()
-				self.logger.debug('content = {0}'.format(content))
+				source = html_page
+				soup = BeautifulSoup(source, features="lxml")
+				body = str(soup.body).replace('\n', ' ')
+				self.logger.debug('soup.headers = {0}'.format(soup.headers))
+				self.logger.debug('soup.body = {0}'.format(body))
+				
 				diff = ''
 			else:
 				self.logger.error('The item:{0} in section urllist is not a url,please check!'.format(url))
